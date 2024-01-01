@@ -9,9 +9,11 @@ import { Link } from 'react-router-dom'
 const Index = () => {
     const isMobileScreen = useMediaQuery({maxWidth: 768});
     const [cardData, SetcardData] = useState([]);
+    // console.log(cardData, 'card')
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // Adjust as needed
-  const totalPages = Math.ceil(cardData.length / itemsPerPage);
+    const totalPages = Math.ceil(cardData.length / itemsPerPage);
+    // const baseUrl = 'http://localhost:3000' ; 
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -66,19 +68,25 @@ const Index = () => {
         <div className='d-flex flex-wrap justify-content-center'>
         {currentCardData && currentCardData?.map((card) => (
           <div key={card.id} className="m-2">
-            <Link to={`/EditMovie/${card.id}`}>
             <div className="movieCard ">
+            <Link to={`/EditMovie/${card.id}`}>
               <img
-                src={card.imageUrl}
+                src={card?.image}
                 className="cardImage img-fluid"
                 alt={card.title}
               />
+            </Link>
               <div className="CardDescMain">
-                <h5 className="cardTitle">{card.title}</h5>
+            <Link to={`/EditMovie/${card.id}`}  className='text-decoration-none'>
+
+                <h5 className="cardTitle">
+                  {card.title}
+                  </h5>
+</Link>
+                  
                 <p className="cardDesc">{card.description}</p>
               </div>
             </div>
-            </Link>
           </div>
         ))}
             
@@ -91,15 +99,35 @@ const Index = () => {
           disabled={currentPage === 1}
           className='prePageNo'
         >
-          Previous <span className='pageButton'> {currentPage}</span>
+          {/* Previous <span className='pageButton'> {currentPage}</span> */}
+          Previous 
         </button>
+
+
+        {Array.from({ length: totalPages }, (_, index) => (
+        <button
+          key={index}
+          onClick={() => handlePageChange(index + 1)}
+          className={index + 1 === currentPage ? 'prePageNo' : 'prePageNo'}
+        >
+          {/* <span className='pageButton'>        {index + 1}</span> */}
+          <span  className={index + 1 === currentPage ? 'pageButton' : 'prePageNo'} >        {index + 1}</span>
+   
+        </button>
+      ))}
+
+
+
+
+
         
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           className='prePageNo'
         >
-       <span className='prePageNo'>{totalPages} </span>Next
+       {/* <span className='prePageNo'>{totalPages} </span> */}
+       Next
         </button>
       </div></div>}
       

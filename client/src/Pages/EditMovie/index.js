@@ -4,11 +4,15 @@ import "../pages.css"
 import { useMediaQuery } from 'react-responsive'
 import DownLoad from '../../assets/svg/DownLoad';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Index = () => {
   const { id } = useParams();
+
   const isMobileScreen = useMediaQuery({maxWidth: 768})
+  const navigate = useNavigate()
   // const [base64Image, setBase64Image] = useState();
   const [cardData, setCardData] = useState({
     id:"",
@@ -16,6 +20,22 @@ const Index = () => {
     year: '',
     image:''
   });
+  const [userUploadImg , setUserUploadImg] = useState(null)
+  const showSuccessToast = () => {
+    toast.success('Update Successfully', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const baseUrl = 'http://localhost:3000' ; 
+  // const ImageUrl = baseUrl+cardData?.image
   useEffect(() => {
     const fetchCardData = async () => {
       try {
@@ -52,7 +72,8 @@ const Index = () => {
       });
 
       // Handle the API response
-      setCardData({image: response.data.imagePath})
+      setCardData({image: baseUrl + response.data.imagePath})
+      setUserUploadImg(baseUrl + response?.data?.imagePath)
       // setBase64Image(response.data.imagePath)
      
     } catch (error) {
@@ -73,7 +94,7 @@ const Index = () => {
     const { name, value } = e.target;
     setCardData({ ...cardData, [name]: value });
   };
-
+  console.log(cardData.image, 'cardData.image')
       const fileInputRef = useRef(null)
       const handleDivClick = () => {
         // fileInputRef.current.click()
@@ -81,12 +102,14 @@ const Index = () => {
           fileInputRef.current.click();
         }
       }
+
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
           const UserId = localStorage.getItem('userId');  
           const PayLoadData = {
           image: cardData.image,
+          // image: ImageUrl,
           title: cardData.title,
           description : cardData.year,
           userId: UserId
@@ -96,7 +119,7 @@ const Index = () => {
           if(!authToken){
             window.location.href = '/signIn';
           }
-          console.log(authToken,"authToken");
+        
           const response = await axios.patch(`http://localhost:3000/movies/${id}`, PayLoadData, {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -105,8 +128,14 @@ const Index = () => {
           });
           console.log( response.data," response.data");
           if( response.data){
-          window.location.href = '/MovieList'}
-          console.log('Card data sent successfully:', response.data);
+            showSuccessToast()
+
+            setTimeout(() => {
+              navigate('/MovieList'); // Replace '/ErrorPage' with the desired error page URL
+            }, 1000)
+          // window.location.href = '/MovieList'
+        }
+          // console.log('Card data sent successfully:', response.data);
         } catch (error) {
           console.error('Error sending card data:', error.message);
         }
@@ -160,7 +189,7 @@ const Index = () => {
           <div>
      
             <div className="col-md-12 px-4 d-flex mt-5">
-                <button className='text-white  MovieCancelButton'>
+                <button className='text-white  MovieCancelButton' onClick={()=>{navigate('/MovieList')}} >
                     Cancel
                 </button>
                 <button className='text-white MovieButton mx-2 '>
@@ -181,6 +210,12 @@ const Index = () => {
         <div className='d-flex'>
             
       <div className=" d-flex justify-content-center align-items-center dropMain" >
+      {
+        cardData?.image &&  <div  className='dropMainUploadImage m-4'>
+        <img src={userUploadImg === null  ?  cardData.image :userUploadImg } className='img-fluid w-25 h-25' alt='img' />
+         
+      </div>
+      }
        <div className="cursor-pointer"  onClick={handleDivClick} >
        <div {...getRootProps()}>
        <input {...getInputProps()} defaultValue={cardData.image} />
@@ -227,6 +262,7 @@ const Index = () => {
           </div>
           </form>
       </div>
+      <ToastContainer/>
     </div>
     }
     </>

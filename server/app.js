@@ -9,6 +9,7 @@ import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
 import { movieRoutes } from './routes/movie.routes.js';
+import {swagger} from './swagger.js';
 const app = express();
 
 app.use(cors({
@@ -57,6 +58,7 @@ app.use(cookieParser());
 authRoutes(app);
 userRoutes(app);
 movieRoutes(app);
+swagger(app)
 
 app.all('*', (req, _, next) => {
   next(new AppError(`Can't find ${req.method} ${req.originalUrl} on this server!`, STATUS_CODES.NOT_FOUND));

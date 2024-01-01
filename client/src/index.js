@@ -4,11 +4,34 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+// import { I18nextProvider } from 'react-i18next';
+// import i18n from 'i18next';
+// import LanguageDetector from 'i18next-browser-languagedetector';
+// import XHR from 'i18next-xhr-backend';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// i18n
+//   .use(XHR)
+//   .use(LanguageDetector)
+//   .init({
+//     fallbackLng: 'en',
+//     ns: ['translations'],
+//     defaultNS: 'translations',
+//     keySeparator: false,
+//     interpolation: {
+//       escapeValue: false,
+//     },
+//     react: {
+//       wait: true,
+//     },
+//   });
+
 root.render(
   <React.StrictMode>
+      
+
     <App />
+     
   </React.StrictMode>
 );
 

@@ -20,7 +20,13 @@ color: #ffffff;
     width: 473px;
     height: 504px;
     background-color: #224957;
-    border: 2px dotted white;  
+    border: 2px dotted white; 
+    position: relative; 
+}
+.dropMainUploadImage {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 .dropMainMobile{
     width: 380px;

@@ -9,7 +9,8 @@ import EmptyState from "../Pages/EmptyState"
 
 const Router = () => {
     return (<>
-    
+   
+
     <BrowserRouter >
       <Routes>
         <Route path="/" Component={SignIn} /> 
@@ -20,6 +21,8 @@ const Router = () => {
         <Route path="/CreateMovie" Component={CreateMovie} /> 
       </Routes>
     </BrowserRouter>
+  
+
     
     </>)
 }
